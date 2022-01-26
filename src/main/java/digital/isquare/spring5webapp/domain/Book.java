@@ -1,9 +1,6 @@
 package digital.isquare.spring5webapp.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -14,6 +11,11 @@ public class Book {
     private Long id;
     private String title;
     private String isbn;
+
+    @ManyToMany
+    @JoinTable(name = "author-book",
+            joinColumns = @JoinColumn(name = "book-id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors;
 
     public Book(String title) {
