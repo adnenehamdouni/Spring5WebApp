@@ -1,32 +1,44 @@
 package digital.isquare.spring5webapp.domain;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Book {
+@Table(name = "book")
+@EntityListeners(AuditingEntityListener.class)
+public class Book extends AuditModel {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "book_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
     private String isbn;
 
-    @ManyToMany
-    @JoinTable(name = "author-book",
+    @ManyToMany(cascade = {CascadeType.ALL})
+            /*(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })*/
+    @JoinTable(name = "author_book",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
 
     public Book() {
 
     }
 
-    public Book(String title, String isbn, Set<Author> authors) {
+    public Book(String title, String isbn) {
         this.title = title;
         this.isbn = isbn;
-        this.authors = authors;
     }
 
     public Long getId() {
