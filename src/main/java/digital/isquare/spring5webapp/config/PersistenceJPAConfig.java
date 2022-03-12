@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,7 +22,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 @Configuration
-@PropertySource(value = {"classpath:persistence-h2.properties"})
+//@PropertySource(value = {"classpath:persistence-dev.properties"})
+@PropertySources({
+        @PropertySource(value = "classpath:persistence-${spring.profiles.active}.properties", ignoreResourceNotFound = true)
+})
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "digital.isquare.spring5webapp.repositories")
 public class PersistenceJPAConfig {

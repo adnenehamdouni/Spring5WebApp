@@ -1,4 +1,4 @@
-package digital.isquare.spring5webapp.controllers;
+package digital.isquare.spring5webapp.controller;
 
 import digital.isquare.spring5webapp.domain.Book;
 import digital.isquare.spring5webapp.exception.ResourceNotFoundException;
@@ -53,7 +53,7 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public Map<String, Boolean> deleteUser(
+    public Map<String, Boolean> deleteBook(
             @PathVariable(value = "id") Long bookId) throws ResourceNotFoundException {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found :: " + bookId));
@@ -62,5 +62,10 @@ public class BookController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @DeleteMapping("/books/all")
+    public void deleteAllBooks() {
+        bookRepository.deleteAll();
     }
 }

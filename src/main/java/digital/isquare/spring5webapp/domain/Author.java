@@ -1,5 +1,8 @@
 package digital.isquare.spring5webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -8,6 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Data
+@EqualsAndHashCode(exclude = "books")
 @Table(name = "author")
 @EntityListeners(AuditingEntityListener.class)
 public class Author extends AuditModel {
@@ -16,12 +21,13 @@ public class Author extends AuditModel {
 
     @Id
     @Column(name = "author_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
 
     @ManyToMany(mappedBy = "authors")
+    @JsonIgnoreProperties("authors")
     private Set<Book> books = new HashSet<>();
 
     public Author() {
